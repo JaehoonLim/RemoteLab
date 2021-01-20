@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+   <head>
+      <title>Remote Control General Physics Lab</title>
+   </head>
+
+   <body>
+      <center>
+      <h2>Remote Control General Physics Lab</h2>
+      <h3>Buttons don't work with Safari</h3>
+      <p id="clock">Server time (Seoul)</p>
+      {%for i in (0, 1)%}
+         {%for j in (0, 25, 50, 75, 100)%}
+            <button id="{{i}}_{{j}}" class="button" onfocus="window.location.href='{{ url_for('led_control',number=i, value=j) }}'">LED{{i}} - {{j}} %</button>
+         {%endfor%}
+         <br>
+      {%endfor%}
+      <br>
+      <!--img src="{{ url_for('video_feed0') }}"-->
+      <img src="{{ url_for('video_feed1') }}"><br>
+
+      <h3><img src="{{ url_for('video_digit0') }}">    <p style="display:inline" id="rpm">RPM</p> rpm / <p style="display:inline" id="hz">HZ</p> Hz</h3><br>
+      <!--br><br><br><br>
+      <img src="{{ url_for('video_feed0') }}"-->
+      </center>
+   </body>
+
+   <script>
+      var clock = document.getElementById("clock");
+      var rpm = document.getElementById("rpm");
+      var hz = document.getElementById("hz");
+
+      setInterval(() => {
+         fetch("{{ url_for('time_feed') }}")
+            .then(response => {  response.text().then(t => {clock.innerHTML = t}) });
+         fetch("{{ url_for('rpm_feed') }}")
+            .then(response => {  response.text().then(t => {rpm.innerHTML = t}) });
+         fetch("{{ url_for('hz_feed') }}")
+            .then(response => {  response.text().then(t => {hz.innerHTML = t}) });
+      }, 1000);  
+   </script>
+
+</html>
